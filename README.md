@@ -1,5 +1,7 @@
 # ProChat
 
+![ProChat](https://i.postimg.cc/TwvMRHjT/Max-a-sdelaj-iz-etogo-post-(1).png)
+
 Un plugin de chat pour Paper 1.21+. Remplace le chat vanilla ennuyeux par des fonctionnalités que les joueurs veulent vraiment.
 
 Canaux, noms animés, @mentions, particules, anti-spam, badges — tout dans un seul jar.
