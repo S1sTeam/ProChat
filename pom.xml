@@ -5,7 +5,7 @@
 
     <groupId>me.prochat</groupId>
     <artifactId>ProChat</artifactId>
-    <version>0.1</version>
+    <version>0.11</version>
     <packaging>jar</packaging>
 
     <properties>

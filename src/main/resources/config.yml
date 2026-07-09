@@ -1,5 +1,5 @@
 format:
-  chat: "{channel_prefix}{prefix}{display_name}{suffix}&7: {message}"
+  chat: "{badges}{channel_prefix}{prefix}{display_name_anim}{suffix}&7: {message}"
   join: "&8[&a+&8] &7{player}"
   quit: "&8[&c-&8] &7{player}"
 
@@ -26,17 +26,67 @@ channels:
     permission: "prochat.channel.admin"
     priority: 3
 
+animated_gradient:
+  enabled: true
+  speed: 3
+  cycle_colors:
+    - "#ff4444"
+    - "#ff8800"
+    - "#ffdd00"
+    - "#44ff44"
+    - "#00ddff"
+    - "#8844ff"
+    - "#ff44ff"
+
+badges:
+  enabled: true
+  list:
+    admin: "&4[ADMIN]&r "
+    vip: "&6[VIP]&r "
+    donator: "&a[★]&r "
+    default: "&7[✦]&r "
+
+chat_particles:
+  enabled: true
+  type: "HEART"
+  count: 8
+  speed: 0.05
+  spread: 0.6
+  permission: "prochat.particles"
+
+personal_sound:
+  enabled: true
+  default: "block.note_block.pling"
+  permission: "prochat.sound"
+
 mention:
   enabled: true
   format: "&b&l@{player}&r"
+  permission: "prochat.mention"
+  clickable: true
   sound:
     enabled: true
     type: "entity.experience_orb.pickup"
-    volume: 1.0
-    pitch: 1.0
-  permission: "prochat.mention"
-  clickable: true
-  highlight_message: true
+    volume: 0.5
+    pitch: 1.5
+  actionbar:
+    enabled: true
+    message: "&b&l⚡ {player} &bmentioned you!"
+  title:
+    enabled: false
+    title: "&b&lMENTION!"
+    subtitle: "&7by {player}"
+    fade_in: 10
+    stay: 40
+    fade_out: 10
+  particles:
+    enabled: true
+    type: "HAPPY_VILLAGER"
+    count: 15
+    speed: 0.2
+  personal_highlight:
+    enabled: true
+    color: "&e&l"
 
 anti_spam:
   enabled: true
