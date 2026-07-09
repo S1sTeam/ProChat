@@ -5,14 +5,12 @@ import me.prochat.config.Settings;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class AntiSpamManager {
 
     private final ProChatPlugin plugin;
     private final Map<UUID, Long> lastMessageTime = new HashMap<>();
     private final Map<UUID, String> lastMessageContent = new HashMap<>();
-    private final Pattern leetPattern = Pattern.compile("[@4a@4][b8][c(]|etc", Pattern.CASE_INSENSITIVE);
 
     public AntiSpamManager(ProChatPlugin plugin) {
         this.plugin = plugin;
@@ -20,20 +18,14 @@ public class AntiSpamManager {
 
     public String check(Player player, String message) {
         Settings.AntiSpamConfig cfg = plugin.getConfigManager().getSettings().antiSpam;
-        if (!cfg.enabled) return null;
+        if (cfg == null || !cfg.enabled) return null;
         if (player.hasPermission("prochat.bypass.antispam")) return null;
 
         UUID uuid = player.getUniqueId();
         long now = System.currentTimeMillis() / 1000;
 
-        if (cfg.cooldownEnabled) {
-            Long lastTime = lastMessageTime.get(uuid);
-            if (lastTime != null && (now - lastTime) < cfg.cooldownSeconds) {
-                long remaining = cfg.cooldownSeconds - (now - lastTime);
-                return plugin.getConfigManager().getRawMessage("antispam_cooldown")
-                        .replace("{time}", String.valueOf(remaining));
-            }
-        }
+        String cooldownMsg = checkCooldown(player, uuid, now, cfg);
+        if (cooldownMsg != null) return cooldownMsg;
 
         if (cfg.capsEnabled && message.length() >= cfg.capsMinLength) {
             int upper = 0;
@@ -70,6 +62,27 @@ public class AntiSpamManager {
 
         lastMessageTime.put(uuid, now);
         lastMessageContent.put(uuid, message);
+        return null;
+    }
+
+    private String checkCooldown(Player player, UUID uuid, long now, Settings.AntiSpamConfig cfg) {
+        if (!cfg.cooldownEnabled) return null;
+        if (player.hasPermission("prochat.cooldown.bypass")) return null;
+
+        int cooldown = cfg.cooldownSeconds;
+
+        for (Map.Entry<String, Integer> entry : cfg.cooldownGroups.entrySet()) {
+            if (player.hasPermission(entry.getKey())) {
+                cooldown = Math.min(cooldown, entry.getValue());
+            }
+        }
+
+        Long last = lastMessageTime.get(uuid);
+        if (last != null && (now - last) < cooldown) {
+            long remaining = cooldown - (now - last);
+            return plugin.getConfigManager().getRawMessage("antispam_cooldown")
+                    .replace("{time}", String.valueOf(remaining));
+        }
         return null;
     }
 

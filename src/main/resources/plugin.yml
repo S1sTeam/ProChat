@@ -11,11 +11,32 @@ commands:
   prochat:
     description: Main ProChat command
     aliases: [pc]
-    usage: /<command> [reload|channel]
+    usage: /<command> [reload|channel|sound]
   msg:
-    description: Send a private message
+    description: Send a private message (overrides vanilla)
     aliases: [tell, whisper, w, m]
     usage: /<command> <player> <message>
+  reply:
+    description: Reply to last private message
+    aliases: [r]
+    usage: /<command> <message>
+  socialspy:
+    description: Spy on private messages
+    aliases: [sspy]
+    usage: /<command>
+  ignore:
+    description: Ignore a player
+    usage: /<command> <player>
+  chatlog:
+    description: View chat history of a player
+    usage: /<command> [player|clear]
+  muteall:
+    description: Mute the entire chat
+    usage: /<command> [time] [reason]
+  clear:
+    description: Clear chat
+    usage: /<command>
+    aliases: [cc]
 
 permissions:
   prochat.*:
@@ -29,9 +50,38 @@ permissions:
       prochat.rgb: true
       prochat.gradient: true
       prochat.bypass.antispam: true
+      prochat.msg: true
+      prochat.socialspy: true
+      prochat.ignore: true
+      prochat.chatlog: true
+      prochat.muteall: true
+      prochat.clear: true
+      prochat.sound: true
+      prochat.particles: true
+      prochat.badge.*: true
+      prochat.bypass.muteall: true
+
+  # ── Chat ──
   prochat.reload:
     description: Reload config
     default: op
+  prochat.color:
+    description: Use color codes
+    default: true
+  prochat.rgb:
+    description: Use hex colors
+    default: op
+  prochat.gradient:
+    description: Use gradients
+    default: op
+  prochat.mention:
+    description: Use @mentions
+    default: true
+  prochat.bypass.antispam:
+    description: Bypass anti-spam checks
+    default: op
+
+  # ── Channels ──
   prochat.channel.*:
     description: All channels
     default: op
@@ -48,18 +98,74 @@ permissions:
   prochat.channel.admin:
     description: Use admin chat
     default: op
-  prochat.mention:
-    description: Use @mentions
+
+  # ── Private Messages ──
+  prochat.msg:
+    description: Send private messages
     default: true
-  prochat.color:
-    description: Use color codes
+  prochat.msg.receive:
+    description: Receive private messages
     default: true
-  prochat.rgb:
-    description: Use hex colors
+  prochat.socialspy:
+    description: Spy on private messages
     default: op
-  prochat.gradient:
-    description: Use gradients
+  prochat.ignore:
+    description: Ignore players
+    default: true
+  prochat.ignore.bypass:
+    description: Bypass being ignored
     default: op
-  prochat.bypass.antispam:
-    description: Bypass anti-spam
+
+  # ── Chat Log ──
+  prochat.chatlog:
+    description: View chat log
     default: op
+  prochat.chatlog.clear:
+    description: Clear chat log
+    default: op
+
+  # ── Moderation ──
+  prochat.muteall:
+    description: Mute the entire chat
+    default: op
+  prochat.bypass.muteall:
+    description: Bypass muteall (/msg still works)
+    default: op
+  prochat.clear:
+    description: Clear chat
+    default: op
+
+  # ── Cosmetics ──
+  prochat.sound:
+    description: Personal message sound
+    default: true
+  prochat.particles:
+    description: Chat particles on message send
+    default: true
+  prochat.badge.*:
+    description: All badges
+    default: op
+    children:
+      prochat.badge.admin: true
+      prochat.badge.vip: true
+      prochat.badge.donator: true
+  prochat.badge.admin:
+    description: Admin badge
+    default: op
+  prochat.badge.vip:
+    description: VIP badge
+    default: true
+  prochat.badge.donator:
+    description: Donator badge
+    default: true
+
+  # ── Cooldown Groups ──
+  prochat.cooldown.bypass:
+    description: No chat cooldown
+    default: op
+  prochat.cooldown.group.vip:
+    description: VIP cooldown group
+    default: false
+  prochat.cooldown.group.premium:
+    description: Premium cooldown group
+    default: false

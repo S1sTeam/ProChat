@@ -17,6 +17,10 @@ public class Settings {
     public ChatParticlesConfig chatParticles;
     public PersonalSoundConfig personalSound;
     public MentionConfig mention;
+    public ShortcodesConfig shortcodes;
+    public PrivateMessagesConfig privateMessages;
+    public ChatLogConfig chatlog;
+    public MuteAllConfig muteall;
     public AntiSpamConfig antiSpam;
 
     public void load(ConfigurationSection config) {
@@ -91,7 +95,6 @@ public class Settings {
             mention.format = ment.getString("format", "&b&l@{player}&r");
             mention.permission = ment.getString("permission", "prochat.mention");
             mention.clickable = ment.getBoolean("clickable", true);
-
             ConfigurationSection snd = ment.getConfigurationSection("sound");
             if (snd != null) {
                 mention.soundEnabled = snd.getBoolean("enabled", true);
@@ -99,13 +102,11 @@ public class Settings {
                 mention.soundVolume = (float) snd.getDouble("volume", 0.5);
                 mention.soundPitch = (float) snd.getDouble("pitch", 1.5);
             }
-
             ConfigurationSection ab = ment.getConfigurationSection("actionbar");
             if (ab != null) {
                 mention.actionbarEnabled = ab.getBoolean("enabled", true);
                 mention.actionbarMessage = ab.getString("message", "&b&l⚡ {player} &bmentioned you!");
             }
-
             ConfigurationSection tit = ment.getConfigurationSection("title");
             if (tit != null) {
                 mention.titleEnabled = tit.getBoolean("enabled", false);
@@ -115,7 +116,6 @@ public class Settings {
                 mention.titleStay = tit.getInt("stay", 40);
                 mention.titleFadeOut = tit.getInt("fade_out", 10);
             }
-
             ConfigurationSection psp = ment.getConfigurationSection("particles");
             if (psp != null) {
                 mention.particlesEnabled = psp.getBoolean("enabled", true);
@@ -123,12 +123,55 @@ public class Settings {
                 mention.particlesCount = psp.getInt("count", 15);
                 mention.particlesSpeed = psp.getDouble("speed", 0.2);
             }
-
             ConfigurationSection ph = ment.getConfigurationSection("personal_highlight");
             if (ph != null) {
                 mention.personalHighlight = ph.getBoolean("enabled", true);
                 mention.highlightColor = ph.getString("color", "&e&l");
             }
+        }
+
+        ConfigurationSection sc = config.getConfigurationSection("shortcodes");
+        if (sc != null) {
+            shortcodes = new ShortcodesConfig();
+            shortcodes.enabled = sc.getBoolean("enabled", true);
+            ConfigurationSection list = sc.getConfigurationSection("list");
+            if (list != null) {
+                for (String key : list.getKeys(false)) {
+                    shortcodes.shortcodes.put(key, list.getString(key, ""));
+                }
+            }
+        }
+
+        ConfigurationSection pm = config.getConfigurationSection("private_messages");
+        if (pm != null) {
+            privateMessages = new PrivateMessagesConfig();
+            privateMessages.enabled = pm.getBoolean("enabled", true);
+            privateMessages.formatSend = pm.getString("format_send", "&7[&bMe &7-> &b{target}&7] &f{message}");
+            privateMessages.formatReceive = pm.getString("format_receive", "&7[&b{sender}&7 -> &bMe&7] &f{message}");
+            privateMessages.formatSocialspy = pm.getString("format_socialspy", "&8[&cSS&8] &7{sender} &7-> &7{target}&7: &f{message}");
+            ConfigurationSection pms = pm.getConfigurationSection("sound");
+            if (pms != null) {
+                privateMessages.soundEnabled = pms.getBoolean("enabled", true);
+                privateMessages.soundType = pms.getString("type", "entity.experience_orb.pickup");
+                privateMessages.soundVolume = (float) pms.getDouble("volume", 0.3);
+                privateMessages.soundPitch = (float) pms.getDouble("pitch", 1.8);
+            }
+        }
+
+        ConfigurationSection cl = config.getConfigurationSection("chatlog");
+        if (cl != null) {
+            chatlog = new ChatLogConfig();
+            chatlog.maxMessages = cl.getInt("max_messages", 50);
+            chatlog.fileFormat = cl.getString("file_format", "yyyy-MM-dd");
+            chatlog.notifyOnLogout = cl.getBoolean("notify_on_logout", false);
+        }
+
+        ConfigurationSection ma = config.getConfigurationSection("muteall");
+        if (ma != null) {
+            muteall = new MuteAllConfig();
+            muteall.enabled = ma.getBoolean("enabled", true);
+            muteall.autoUnmute = ma.getInt("auto_unmute", 0);
+            muteall.reason = ma.getString("reason", "Chat has been muted by an administrator.");
         }
 
         ConfigurationSection aspam = config.getConfigurationSection("anti_spam");
@@ -139,6 +182,12 @@ public class Settings {
             if (cd != null) {
                 antiSpam.cooldownEnabled = cd.getBoolean("enabled", true);
                 antiSpam.cooldownSeconds = cd.getInt("seconds", 2);
+            }
+            ConfigurationSection cg = aspam.getConfigurationSection("cooldown_groups");
+            if (cg != null) {
+                for (String key : cg.getKeys(false)) {
+                    antiSpam.cooldownGroups.put(key, cg.getInt(key, 2));
+                }
             }
             ConfigurationSection caps = aspam.getConfigurationSection("caps");
             if (caps != null) {
@@ -221,10 +270,39 @@ public class Settings {
         public String highlightColor;
     }
 
+    public static class ShortcodesConfig {
+        public boolean enabled;
+        public Map<String, String> shortcodes = new LinkedHashMap<>();
+    }
+
+    public static class PrivateMessagesConfig {
+        public boolean enabled;
+        public String formatSend;
+        public String formatReceive;
+        public String formatSocialspy;
+        public boolean soundEnabled;
+        public String soundType;
+        public float soundVolume;
+        public float soundPitch;
+    }
+
+    public static class ChatLogConfig {
+        public int maxMessages;
+        public String fileFormat;
+        public boolean notifyOnLogout;
+    }
+
+    public static class MuteAllConfig {
+        public boolean enabled;
+        public int autoUnmute;
+        public String reason;
+    }
+
     public static class AntiSpamConfig {
         public boolean enabled;
         public boolean cooldownEnabled;
         public int cooldownSeconds;
+        public Map<String, Integer> cooldownGroups = new LinkedHashMap<>();
         public boolean capsEnabled;
         public int capsMinLength;
         public int capsThreshold;

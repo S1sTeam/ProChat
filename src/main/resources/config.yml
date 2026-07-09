@@ -71,7 +71,7 @@ mention:
     pitch: 1.5
   actionbar:
     enabled: true
-    message: "&b&l⚡ {player} &bmentioned you!"
+    message: "&b&l\u26A1 {player} &bmentioned you!"
   title:
     enabled: false
     title: "&b&lMENTION!"
@@ -88,11 +88,50 @@ mention:
     enabled: true
     color: "&e&l"
 
+shortcodes:
+  enabled: true
+  list:
+    ":shrug:": "\u00AF\\_(\u30C4)_/\u00AF"
+    ":arrow:": "\u00BB"
+    ":check:": "\u2714"
+    ":cross:": "\u2718"
+    ":star:": "\u2605"
+    ":heart:": "\u2764"
+    ":skull:": "\u2620"
+    ":pickaxe:": "\u26CF"
+    ":sword:": "\u2694"
+    ":arrow_right:": "\u2192"
+    ":arrow_left:": "\u2190"
+
+private_messages:
+  enabled: true
+  format_send: "&7[&bMe &7-> &b{target}&7] &f{message}"
+  format_receive: "&7[&b{sender}&7 -> &bMe&7] &f{message}"
+  format_socialspy: "&8[&cSS&8] &7{sender} &7-> &7{target}&7: &f{message}"
+  sound:
+    enabled: true
+    type: "entity.experience_orb.pickup"
+    volume: 0.3
+    pitch: 1.8
+
+chatlog:
+  max_messages: 50
+  file_format: "yyyy-MM-dd"
+  notify_on_logout: false
+
+muteall:
+  enabled: true
+  auto_unmute: 0
+  reason: "Chat has been muted by an administrator."
+
 anti_spam:
   enabled: true
   cooldown:
     enabled: true
     seconds: 2
+  cooldown_groups:
+    prochat.cooldown.group.vip: 1
+    prochat.cooldown.group.premium: 0
   caps:
     enabled: true
     min_length: 5
