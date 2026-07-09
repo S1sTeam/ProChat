@@ -1,132 +1,267 @@
-# ⚡ ProChat
+# ProChat
 
-**ProChat** — мощный плагин для Paper 1.21+, который полностью преображает чат на вашем сервере Minecraft.  
-Анимированные ники, каналы, @упоминания со звуком и частицами, анти-спам, бейджи и многое другое.
+Плагин на чат для Paper 1.21+. Заменяет стандартный скучный чат на то, чо люди хотят видеть.
 
----
+Каналы, анимированные ники, @упоминания, частицы, антиспам, бейджи — всё в одной банке.
 
-## ✨ Возможности
+## Чего умеет
 
-| Фича | Описание |
-|------|----------|
-| **🌈 Анимированный градиент** | Никнеймы переливаются цветами радуги прямо в чате |
-| **🏷️ Бейджи (Chat Badges)** | Иконки перед ником: `[ADMIN]`, `[VIP]`, `[★]` и т.д. |
-| **🎨 Форматирование сообщений** | `&c`, `#RRGGBB`, `<gradient:#c1:#c2>text</gradient>` |
-| **📢 Каналы чата** | Локальный, глобальный, админ-канал с настраиваемой дистанцией |
-| **@Упоминания** | `@ник` → подсветка сообщения + звук + частицы + ActionBar + Title |
-| **🔊 Персональный звук** | Каждый игрок выбирает свой звук для новых сообщений |
-| **✨ Частицы при отправке** | Красивые частицы вокруг игрока, когда он пишет в чат |
-| **🛡️ Анти-спам** | Cooldown, защита от капса, фильтр мата, блокировка повторов |
-| **🔌 PlaceholderAPI** | Поддержка `%player_prefix%`, `%player_suffix%` |
-| **⚙️ Гибкая настройка** | Всё в `config.yml` и `messages.yml` — цвета, звуки, частицы, форматы |
+**Формат ника с анимацией**  
+Ник переливается по цветам из конфига. Можно настроить скорость и палитру. Работает через плэйсхолдер `{display_name_anim}` в формате чата.
 
----
+**Три канала из коробки**  
+- local — только игроки рядом (дальность настраивается)  
+- global — весь сервер  
+- admin — только для админов  
 
-## 📥 Установка
+Включаются/выключаются, меняются имена, цвета, расстояния, права доступа — всё в конфиге.
 
-1. Скачай `ProChat-0.11.jar` из [релизов](https://github.com/S1sTeam/ProChat/releases)
-2. Положи в папку `plugins/` твоего сервера
-3. Перезапусти сервер (или `/reload`)
-4. Настрой под себя в `plugins/ProChat/config.yml`
+**Упоминания**  
+Пишешь `@ник` — чел получает:
+- сообщение в чате с подсветкой (видит только он)
+- actionbar с инфой кто тегнул
+- звук (настраивается)
+- частицы вокруг него
+- title если включено в конфиге
+- при клике на @ник подставляется `/msg ник`
 
-**Зависимости:**  
-- ✅ **Paper 1.21+** (рекомендуется последняя версия)  
-- ⏺ PlaceholderAPI (опционально, для префиксов/суффиксов)
+**Бейджи**  
+Иконки перед ником по правам. Повесил `prochat.badge.vip` — попёр `[VIP]`. Можно любое название и формат.
 
----
+**Персональный звук на сообщения**  
+`/prochat sound ENTITY_EXPERIENCE_ORB_PICKUP` — и теперь каждый раз когда приходит сообщение, играет этот звук. Сохраняется в sounds.yml, не слетает после рестарта.
 
-## 📝 Форматирование
+**Частицы при отправке**  
+Написал сообщение — вокруг тебя частицы. Тип, количество, радиус — в конфиге.
 
-```
-&c — красный                        &l — жирный
-&e — жёлтый                         &o — курсив
-#ff0000 — hex цвет                  &n — подчёркнутый
-```
+**Антиспам**  
+Кд между сообщениями, капс-детектор (процент заглавных можно настроить), фильтр мата по списку слов, антиповтор.
 
-Градиент:  
-```
-<gradient:#ff4444:#44ff44>Привет, мир!</gradient>
-```
+**PlaceholderAPI**  
+Если стоит на сервере — подхватывает `%player_prefix%` и `%player_suffix%` для формата.
 
-Анимированный градиент (в формате ника):  
-```
-<anim_gradient>Игрок</anim_gradient>
-```
+## Установка
 
----
+1. Скачать jar
+2. Кинуть в plugins/
+3. Перезапустить сервер
+4. Открыть `plugins/ProChat/config.yml` и читать
 
-## 💬 Команды
+Зависимостей никаких нет. PlaceholderAPI не обязателен, но с ним префиксы работают.
 
-| Команда | Описание | Право |
-|---------|----------|-------|
-| `/prochat reload` | Перезагрузить конфиг | `prochat.reload` |
-| `/prochat channel <канал>` | Переключить канал | `prochat.reload` |
-| `/prochat sound <звук>` | Установить звук сообщений | `prochat.sound` |
-| `/msg <игрок> <сообщение>` | Личное сообщение | — |
-| `@<игрок>` | Упомянуть игрока в чате | `prochat.mention` |
-
----
-
-## 🔧 Права (Permissions)
-
-```
-prochat.*                        — Все права
-prochat.reload                   — Перезагрузка конфига
-prochat.channel.local            — Локальный чат
-prochat.channel.global           — Глобальный чат
-prochat.channel.admin            — Админ-чат
-prochat.mention                  — @упоминания
-prochat.color                    — Цвета (&a-&f)
-prochat.rgb                      — Hex цвета (#RRGGBB)
-prochat.gradient                 — Градиенты
-prochat.bypass.antispam          — Обход анти-спама
-prochat.sound                    — Персональный звук
-prochat.particles                — Частицы при отправке
-prochat.badge.<название>         — Бейдж (например prochat.badge.vip)
-```
-
----
-
-## 🗂️ Структура конфига
+## Конфиг
 
 ```yaml
 format:
   chat: "{badges}{channel_prefix}{prefix}{display_name_anim}{suffix}&7: {message}"
+  join: "&8[&a+&8] &7{player}"
+  quit: "&8[&c-&8] &7{player}"
 
+channels:
+  local:
+    enabled: true
+    display: "L"
+    color: "&7"
+    range: 100
+    permission: "prochat.channel.local"
+    priority: 1
+  global:
+    enabled: true
+    display: "G"
+    color: "&a"
+    range: -1
+    permission: "prochat.channel.global"
+    priority: 2
+  admin:
+    enabled: true
+    display: "A"
+    color: "&c"
+    range: -1
+    permission: "prochat.channel.admin"
+    priority: 3
+```
+
+Формат чата собирается из плэйсхолдеров:  
+`{badges}` — бейджи игрока  
+`{channel_prefix}` — префикс канала вида `[G]`  
+`{prefix}` / `{suffix}` — из PlaceholderAPI  
+`{display_name}` — обычный displayname  
+`{display_name_anim}` — displayname с анимированным градиентом  
+`{player}` — ник  
+`{world}` — мир  
+`{message}` — сообщение
+
+### Анимированный градиент
+
+```yaml
 animated_gradient:
   enabled: true
   speed: 3
-  cycle_colors: ["#ff4444", "#ff8800", "#ffdd00", "#44ff44", "#00ddff", "#8844ff", "#ff44ff"]
+  cycle_colors:
+    - "#ff4444"
+    - "#ff8800"
+    - "#ffdd00"
+    - "#44ff44"
+    - "#00ddff"
+    - "#8844ff"
+    - "#ff44ff"
+```
 
-chat_particles:
-  enabled: true
-  type: HEART
-  count: 8
-  spread: 0.6
+speed — через сколько тиков сдвигается градиент. 3 норм, 1 — быстрое мельтешение.  
+cycle_colors — список цветов по порядку. Можно хоть два, хоть десять.
 
+В формате ника `<anim_gradient>S1sTeam</anim_gradient>`.
+Если надо прямо в сообщении: `<gradient:#ff0000:#00ff00>твой текст</gradient>`.
+
+### Mention со всей обвязкой
+
+```yaml
 mention:
+  enabled: true
+  format: "&b&l@{player}&r"
+  permission: "prochat.mention"
+  clickable: true
+  sound:
+    enabled: true
+    type: "entity.experience_orb.pickup"
+    volume: 0.5
+    pitch: 1.5
   actionbar:
     enabled: true
+    message: "&b&l⚡ {player} &bmentioned you!"
   title:
     enabled: false
+    title: "&b&lMENTION!"
+    subtitle: "&7by {player}"
+    fade_in: 10
+    stay: 40
+    fade_out: 10
   particles:
     enabled: true
+    type: "HAPPY_VILLAGER"
+    count: 15
+    speed: 0.2
   personal_highlight:
     enabled: true
     color: "&e&l"
 ```
 
-Полный пример — в `plugins/ProChat/config.yml`.
+Каждый блок можно вырубить отдельно. Title по дефолту выключен — слишком навязчиво.  
+`personal_highlight` — когда тебя тегнули, ты видишь сообщение целиком выделенным цветом `color`. Остальные видят обычный чат.
 
----
+### Бейджи
 
-## 📜 Лицензия
+```yaml
+badges:
+  enabled: true
+  list:
+    admin: "&4[ADMIN]&r "
+    vip: "&6[VIP]&r "
+    donator: "&a[★]&r "
+    default: "&7[✦]&r "
+```
 
-MIT License — делай что хочешь, но не выдавай за своё.
+Права: `prochat.badge.admin`, `prochat.badge.vip` и т.д.  
+`default` — показывается если нет ни одного бейджа. Можно убрать.
 
----
+### Частицы при отправке
 
-## 👨‍💻 Разработчик
+```yaml
+chat_particles:
+  enabled: true
+  type: "HEART"
+  count: 8
+  speed: 0.05
+  spread: 0.6
+  permission: "prochat.particles"
+```
 
-**S1sTeam**  
-[github.com/S1sTeam/ProChat](https://github.com/S1sTeam/ProChat)
+Тип — любое название Particle из майнкрафта. HEART, NOTE, FLAME, VILLAGER_HAPPY, COMPOSTER, LAVA... Что душе угодно.
+
+### Персональный звук
+
+```yaml
+personal_sound:
+  enabled: true
+  default: "block.note_block.pling"
+  permission: "prochat.sound"
+```
+
+Игроки меняют через `/prochat sound <название>`. TabCompleter показывает популярные варианты.
+
+### Антиспам
+
+```yaml
+anti_spam:
+  enabled: true
+  cooldown:
+    enabled: true
+    seconds: 2
+  caps:
+    enabled: true
+    min_length: 5
+    threshold: 75
+  swear:
+    enabled: true
+    words: []
+    replace_char: "*"
+  repeat:
+    enabled: true
+    max_similarity: 85
+```
+
+`threshold` — если больше этого процента букв заглавные, сообщение блокируется.  
+`max_similarity` — процент совпадения с предыдущим сообщением.  
+`words` — список матерных слов (пустой по умолчанию, заполнять руками).
+
+## Команды
+
+```
+/prochat reload             — перечитать конфиг
+/prochat channel <имя>      — переключиться на канал
+/prochat sound <звук>       — установить звук сообщений
+/msg <игрок> <текст>        — личка
+```
+
+Табы работают.
+
+## Права
+
+```
+prochat.*                        — всё сразу
+prochat.reload                   — перезагрузка
+prochat.channel.local            — локальный чат
+prochat.channel.global           — глобальный
+prochat.channel.admin            — админский
+prochat.mention                  — принимать @упоминания
+prochat.color                    — цветовые коды
+prochat.rgb                      — hex цвета
+prochat.gradient                 — градиенты
+prochat.bypass.antispam          — игнор антиспама
+prochat.sound                    — свой звук сообщений
+prochat.particles                — частицы при отправке
+prochat.badge.<name>             — конкретный бейдж
+```
+
+По дефолту всё что может быть у простых игроков — выдано. Админка, rgb, градиенты, антиспам-байпас — только опам.
+
+## Messages
+
+Все сообщения в messages.yml. Формат строк такой же как в чате — `&цвета`, градиенты, всё работает.
+
+## Сборка
+
+```bash
+mvn clean package
+```
+
+Берёт Paper API 1.21.3. Если сервер старше — поднять версию в pom.xml.  
+На версии ниже 1.21 не собирать — Adventure API там нет на уровне платформы.
+
+## Почему не [другой плагин]
+
+Я перепробовал штук пять чат-плагинов. В каждом чего-то не хватало: где-то нет градиентов, где-то mention через одно место, где-то антиспам кривой. Этот плагин я писал под себя — чтобы работало и не бесило. Если тебе тоже зайдет — пользуйся.
+
+## Лицензия
+
+MIT. Делай что хочешь, форкай, реверс-инжекть, встраивай куда хочешь. Только не говори что сам написал.
