@@ -8,6 +8,7 @@ import me.prochat.config.Settings;
 import me.prochat.hook.BadgeManager;
 import me.prochat.hook.PlaceholderAPIHook;
 import me.prochat.hook.SoundManager;
+import me.prochat.hook.ModerationHook;
 import me.prochat.hook.VanishHook;
 import me.prochat.mention.MentionManager;
 import net.kyori.adventure.text.Component;
@@ -54,6 +55,13 @@ public class ChatListener implements Listener {
             player.sendMessage(FormatManager.parse(
                     plugin.getConfigManager().getRawMessage("antispam_muted")
             ));
+            return;
+        }
+
+        if (plugin.getModerationHook() != null && plugin.getModerationHook().isMuted(player)) {
+            event.setCancelled(true);
+            String msg = plugin.getConfigManager().getRawMessage("antispam_blocked");
+            player.sendMessage(FormatManager.parse(msg));
             return;
         }
 

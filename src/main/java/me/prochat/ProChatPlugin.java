@@ -12,6 +12,7 @@ import me.prochat.config.ConfigManager;
 import me.prochat.hook.BadgeManager;
 import me.prochat.hook.PlaceholderAPIHook;
 import me.prochat.hook.SoundManager;
+import me.prochat.hook.ModerationHook;
 import me.prochat.hook.VanishHook;
 import me.prochat.log.ChatLogManager;
 import me.prochat.mention.MentionManager;
@@ -39,6 +40,7 @@ public class ProChatPlugin extends JavaPlugin {
     private ChatLogManager chatLogManager;
     private MuteManager muteManager;
     private VanishHook vanishHook;
+    private ModerationHook moderationHook;
     private BukkitTask animTask;
 
     @Override
@@ -63,6 +65,7 @@ public class ProChatPlugin extends JavaPlugin {
         chatLogManager = new ChatLogManager(this);
         muteManager = new MuteManager(this);
         vanishHook = new VanishHook();
+        moderationHook = new ModerationHook();
 
         var logCfg = getConfigManager().getSettings().chatlog;
         if (logCfg != null) {
@@ -140,4 +143,5 @@ public class ProChatPlugin extends JavaPlugin {
     public ChatLogManager getChatLogManager() { return chatLogManager; }
     public MuteManager getMuteManager() { return muteManager; }
     public VanishHook getVanishHook() { return vanishHook; }
+    public ModerationHook getModerationHook() { return moderationHook; }
 }
