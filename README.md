@@ -1,59 +1,59 @@
 # ProChat
 
-A chat plugin for Paper 1.21+. Replaces the boring vanilla chat with features players actually want.
+Ein Chat-Plugin für Paper 1.21+. Ersetzt den langweiligen Standard-Chat mit Funktionen, die Spieler wirklich wollen.
 
-Channels, animated display names, @mentions, particles, anti-spam, badges — all in one jar.
+Kanäle, animierte Namen, @Erwähnungen, Partikel, Anti-Spam, Abzeichen — alles in einer Jar.
 
-## Features
+## Funktionen
 
-**Animated Display Names**  
-Display names cycle through configurable colors. Adjustable speed and palette. Works via `{display_name_anim}` placeholder in chat format.
+**Animierte Anzeigenamen**  
+Namen wechseln durch konfigurierbare Farben. Einstellbare Geschwindigkeit und Palette. Funktioniert über den `{display_name_anim}`-Platzhalter im Chat-Format.
 
-**3 Built-in Channels**  
-- `local` — nearby players only (configurable range)  
-- `global` — entire server  
-- `admin` — admins only  
+**3 eingebaute Kanäle**  
+- local — nur nahe Spieler (einstellbare Reichweite)  
+- global — gesamter Server  
+- admin — nur für Admins  
 
-Toggle, rename, recolor, set range and permissions — all in config.
+Ein-/ausschaltbar, umbenennbar, einfärbbar, Reichweite und Berechtigungen — alles in der Config.
 
-**Mentions**  
-Type `@name` and the mentioned player gets:
-- highlighted chat message (only they see it)
-- actionbar notification
-- configurable sound
-- particles around them
-- title (optional, disabled by default)
-- clickable `@name` → auto-fills `/msg name`
+**Erwähnungen**  
+`@Name` eingeben und der Spieler erhält:
+- hervorgehobene Chat-Nachricht (nur für ihn sichtbar)
+- Actionbar-Benachrichtigung
+- konfigurierbaren Sound
+- Partikel um ihn herum
+- optionalen Titel (standardmäßig deaktiviert)
+- klickbaren `@Name` → `/msg Name` wird eingefügt
 
-**Badges**  
-Icons before the name based on permissions. Grant `prochat.badge.vip` → shows `[VIP]`. Any name and format.
+**Abzeichen**  
+Symbole vor dem Namen basierend auf Berechtigungen. `prochat.badge.vip` → zeigt `[VIP]`. Beliebiges Format und Name.
 
-**Personal Message Sound**  
-`/prochat sound ENTITY_EXPERIENCE_ORB_PICKUP` — every incoming message plays your chosen sound. Saved in sounds.yml, persists through restarts.
+**Persönlicher Nachrichten-Sound**  
+`/prochat sound ENTITY_EXPERIENCE_ORB_PICKUP` — bei jeder eingehenden Nachricht wird dieser Sound abgespielt. Gespeichert in sounds.yml, überlebt Neustarts.
 
-**Chat Particles**  
-Send a message → particles spawn around you. Type, count, radius — in config.
+**Chat-Partikel**  
+Nachricht senden → Partikel erscheinen um dich herum. Typ, Anzahl, Radius — in der Config.
 
 **Anti-Spam**  
-Cooldown between messages, caps detector (configurable threshold), swear filter with word list, repeat prevention.
+Cooldown zwischen Nachrichten, Großbuchstaben-Erkennung (einstellbarer Schwellwert), Wortfilter, Wiederholungs-Schutz.
 
 **PlaceholderAPI**  
-Automatically picks up `%player_prefix%` and `%player_suffix%` if installed.
+Erkennt automatisch `%player_prefix%` und `%player_suffix%` falls installiert.
 
-**VoiceChat Integration**  
-Automatically syncs mute/ban/freeze/jail with Simple Voice Chat. When a player is punished, they get muted in voice chat too.
+**VoiceChat-Integration**  
+Automatische Synchronisation von Mute/Ban/Freeze/Jail mit Simple Voice Chat. Wenn ein Spieler bestraft wird, wird er auch im Sprachchat stummgeschaltet.
 
-**Moderation Commands**  
-Built-in shortcuts: `/prochat mute <player>`, `/prochat ban <player>`, `/prochat freeze <player>`, `/prochat jail <player>`. Delegates to EssentialsX, CMI, LiteBAN, or Bukkit API automatically.
+**Moderations-Befehle**  
+Eingebaute Abkürzungen: `/prochat mute <spieler>`, `/prochat ban <spieler>`, `/prochat freeze <spieler>`, `/prochat jail <spieler>`. Delegiert automatisch an EssentialsX, CMI, LiteBAN oder Bukkit API.
 
 ## Installation
 
-1. Download the jar
-2. Drop into `plugins/`
-3. Restart the server
-4. Edit `plugins/ProChat/config.yml`
+1. Jar herunterladen
+2. In `plugins/` ablegen
+3. Server neustarten
+4. `plugins/ProChat/config.yml` bearbeiten
 
-No dependencies. PlaceholderAPI is optional (enables prefix/suffix support).
+Keine Abhängigkeiten. PlaceholderAPI ist optional (ermöglicht Prefix/Suffix).
 
 ## Config
 
@@ -87,17 +87,17 @@ channels:
     priority: 3
 ```
 
-Chat format placeholders:  
-`{badges}` — player badges  
-`{channel_prefix}` — channel prefix e.g. `[G]`  
-`{prefix}` / `{suffix}` — from PlaceholderAPI  
-`{display_name}` — normal display name  
-`{display_name_anim}` — animated gradient display name  
-`{player}` — player name  
-`{world}` — world  
-`{message}` — message
+Chat-Format-Platzhalter:  
+`{badges}` — Spieler-Abzeichen  
+`{channel_prefix}` — Kanal-Präfix z.B. `[G]`  
+`{prefix}` / `{suffix}` — von PlaceholderAPI  
+`{display_name}` — normaler Anzeigename  
+`{display_name_anim}` — animierter Gradienten-Name  
+`{player}` — Spielername  
+`{world}` — Welt  
+`{message}` — Nachricht
 
-### Animated Gradient
+### Animierter Gradient
 
 ```yaml
 animated_gradient:
@@ -113,12 +113,12 @@ animated_gradient:
     - "#ff44ff"
 ```
 
-`speed` — ticks between gradient shifts. 3 is smooth, 1 is fast flicker.  
-`cycle_colors` — ordered color list. Two to ten colors.  
-Use `<anim_gradient>PlayerName</anim_gradient>` in format.  
-Inline in messages: `<gradient:#ff0000:#00ff00>your text</gradient>`.
+`speed` — Ticks zwischen Farbwechseln. 3 ist flüssig, 1 ist schnelles Flackern.  
+`cycle_colors` — geordnete Farbliste. Zwei bis zehn Farben.  
+`<anim_gradient>SpielerName</anim_gradient>` im Format verwenden.  
+Inline in Nachrichten: `<gradient:#ff0000:#00ff00>dein text</gradient>`.
 
-### Mentions
+### Erwähnungen
 
 ```yaml
 mention:
@@ -151,10 +151,10 @@ mention:
     color: "&e&l"
 ```
 
-Each section can be toggled independently. Title is off by default.  
-`personal_highlight` — when you're mentioned, you see the entire message highlighted. Others see normal chat.
+Jeder Abschnitt kann einzeln deaktiviert werden. Titel ist standardmäßig aus.  
+`personal_highlight` — wenn du erwähnt wirst, siehst du die gesamte Nachricht hervorgehoben. Andere sehen normalen Chat.
 
-### Badges
+### Abzeichen
 
 ```yaml
 badges:
@@ -166,10 +166,10 @@ badges:
     default: "&7[✦]&r "
 ```
 
-Permissions: `prochat.badge.admin`, `prochat.badge.vip`, etc.  
-`default` — shown when no badge is granted. Can be removed.
+Berechtigungen: `prochat.badge.admin`, `prochat.badge.vip`, usw.  
+`default` — wird angezeigt wenn kein Abzeichen vergeben wurde. Kann entfernt werden.
 
-### Chat Particles
+### Chat-Partikel
 
 ```yaml
 chat_particles:
@@ -181,9 +181,9 @@ chat_particles:
   permission: "prochat.particles"
 ```
 
-Type — any Minecraft Particle name: HEART, NOTE, FLAME, VILLAGER_HAPPY, COMPOSTER, LAVA...
+Typ — jeder Minecraft Particle-Name: HEART, NOTE, FLAME, VILLAGER_HAPPY, COMPOSTER, LAVA...
 
-### Personal Sound
+### Persönlicher Sound
 
 ```yaml
 personal_sound:
@@ -192,7 +192,7 @@ personal_sound:
   permission: "prochat.sound"
 ```
 
-Players change via `/prochat sound <name>`. TabCompleter shows popular options.
+Spieler ändern via `/prochat sound <name>`. TabCompleter zeigt beliebte Optionen.
 
 ### Anti-Spam
 
@@ -215,9 +215,9 @@ anti_spam:
     max_similarity: 85
 ```
 
-`threshold` — if more than this percentage of characters are uppercase, message is blocked.  
-`max_similarity` — similarity percentage to previous message.  
-`words` — swear word list (empty by default, fill manually).
+`threshold` — wenn mehr als dieser Prozentsatz der Zeichen Großbuchstaben sind, wird die Nachricht blockiert.  
+`max_similarity` — Ähnlichkeitsprozentsatz zur vorherigen Nachricht.  
+`words` — Wortliste (standardmäßig leer, manuell ausfüllen).
 
 ### VoiceChat
 
@@ -228,56 +228,56 @@ voicechat:
   badge: "&b[VC]&r "
 ```
 
-Automatic mute/unmute sync with Simple Voice Chat. Badge shows when in voice chat.
+Automatische Mute/Unmute-Synchronisation mit Simple Voice Chat. Abzeichen wird im Sprachchat angezeigt.
 
-## Commands
-
-```
-/prochat reload             — reload config
-/prochat channel <name>     — switch channel
-/prochat sound <sound>      — set personal message sound
-/prochat mute <player>      — mute player
-/prochat unmute <player>    — unmute player
-/prochat ban <player>       — ban player
-/prochat unban <player>     — unban player
-/prochat freeze <player>    — freeze player
-/prochat unfreeze <player>  — unfreeze player
-/prochat jail <player>      — jail player
-/prochat unjail <player>    — unjail player
-/msg <player> <text>        — private message
-```
-
-Tab completion works for all commands.
-
-## Permissions
+## Befehle
 
 ```
-prochat.*                        — everything
-prochat.reload                   — reload config
-prochat.channel.local            — local channel
-prochat.channel.global           — global channel
-prochat.channel.admin            — admin channel
-prochat.mention                  — receive @mentions
-prochat.color                    — color codes
-prochat.rgb                      — hex colors
-prochat.gradient                 — gradients
-prochat.bypass.antispam          — bypass anti-spam
-prochat.sound                    — personal message sound
-prochat.particles                — chat particles
-prochat.badge.<name>             — specific badge
-prochat.mod.mute                 — mute/unmute commands
-prochat.mod.ban                  — ban/unban commands
-prochat.mod.freeze               — freeze/unfreeze commands
-prochat.mod.jail                 — jail/unjail commands
+/prochat reload             — Config neu laden
+/prochat channel <name>     — Kanal wechseln
+/prochat sound <sound>      — persönlichen Sound setzen
+/prochat mute <spieler>     — Spieler stummschalten
+/prochat unmute <spieler>   — Stummschaltung aufheben
+/prochat ban <spieler>      — Spieler bannen
+/prochat unban <spieler>    — Bann aufheben
+/prochat freeze <spieler>   — Spieler einfrieren
+/prochat unfreeze <spieler> — Auftauen
+/prochat jail <spieler>     — Spieler einsperren
+/prochat unjail <spieler>   — Entlassen
+/msg <spieler> <text>       — Privatnachricht
 ```
 
-Default permissions grant what regular players need. Admin, RGB, gradients, anti-spam bypass — operator only.
+Tab-Vervollständigung funktioniert für alle Befehle.
 
-## Localization
+## Berechtigungen
 
-Languages: English, Russian, German, French.  
-Set `locale` in config.yml: `en`, `ru`, `de`, `fr`.  
-Language files are in `plugins/ProChat/lang/`.
+```
+prochat.*                        — alles
+prochat.reload                   — Config neuladen
+prochat.channel.local            — lokaler Kanal
+prochat.channel.global           — globaler Kanal
+prochat.channel.admin            — Admin-Kanal
+prochat.mention                  — @Erwähnungen empfangen
+prochat.color                    — Farbcodes
+prochat.rgb                      — Hex-Farben
+prochat.gradient                 — Gradienten
+prochat.bypass.antispam          — Anti-Spam umgehen
+prochat.sound                    — persönlicher Sound
+prochat.particles                — Chat-Partikel
+prochat.badge.<name>             — bestimmtes Abzeichen
+prochat.mod.mute                 — mute/unmute Befehle
+prochat.mod.ban                  — ban/unban Befehle
+prochat.mod.freeze               — freeze/unfreeze Befehle
+prochat.mod.jail                 — jail/unjail Befehle
+```
+
+Standardberechtigungen geben, was normale Spieler brauchen. Admin, RGB, Gradienten, Anti-Spam-Bypass — nur für Operatoren.
+
+## Lokalisierung
+
+Sprachen: Deutsch, Englisch, Russisch, Französisch.  
+`locale` in config.yml setzen: `de`, `en`, `ru`, `fr`.  
+Sprachdateien in `plugins/ProChat/lang/`.
 
 ## Build
 
@@ -285,17 +285,17 @@ Language files are in `plugins/ProChat/lang/`.
 mvn clean package
 ```
 
-Requires Paper API 1.21.3. For older servers, adjust version in pom.xml.  
-Does not build below 1.21 — Adventure API is not available at platform level.
+Erfordert Paper API 1.21.3. Für ältere Server Version in pom.xml anpassen.  
+Nicht unter 1.21 baubar — Adventure API ist auf Plattformebene nicht verfügbar.
 
-## Why not [other plugin]
+## Warum nicht [anderes Plugin]
 
-I tried about five chat plugins. Each was missing something: no gradients, awkward mentions, broken anti-spam. This plugin I wrote for myself — to work properly and not annoy. If you like it too, use it.
+Ich habe etwa fünf Chat-Plugins ausprobiert. Bei jedem fehlte etwas: keine Gradienten, umständliche Erwähnungen, kaputter Anti-Spam. Dieses Plugin habe ich für mich selbst geschrieben — damit es funktioniert und nicht nervt. Wenn es dir auch gefällt, nutze es.
 
-## License
+## Lizenz
 
-MIT. Do whatever you want — fork, reverse engineer, embed. Just don't claim you wrote it.
+MIT. Mach was du willst — fork, reverse engineering, einbetten. Sag nur nicht, du hättest es geschrieben.
 
 ---
 
-Branches: [EN](/) · [RU](https://github.com/S1sTeam/ProChat/tree/RU) · [DE](https://github.com/S1sTeam/ProChat/tree/DE) · [FR](https://github.com/S1sTeam/ProChat/tree/FR)
+Branches: [EN](https://github.com/S1sTeam/ProChat/tree/EN) · [RU](https://github.com/S1sTeam/ProChat/tree/RU) · [DE](/) · [FR](https://github.com/S1sTeam/ProChat/tree/FR)
