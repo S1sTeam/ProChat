@@ -245,6 +245,13 @@ Synchronisation automatique mute/unmute avec Simple Voice Chat. Badge affiché d
 /prochat jail <joueur>      — emprisonner
 /prochat unjail <joueur>    — libérer
 /msg <joueur> <texte>       — message privé
+/r <message>                — répondre au dernier MP
+/socialspy                  — espionner les MP
+/ignore <joueur>            — ignorer un joueur
+/chatlog <joueur>           — voir l'historique du joueur
+/chatlog clear              — effacer l'historique
+/muteall [temps] [raison]   — rendre tout le chat muet
+/clear (/cc)                — effacer le chat
 ```
 
 La complétion par tabulation fonctionne pour toutes les commandes.
