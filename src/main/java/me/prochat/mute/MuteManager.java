@@ -27,12 +27,17 @@ public class MuteManager {
         if (seconds > 0) {
             taskId = Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 muted = false;
-                Bukkit.broadcast(FormatManager.parse("&8[&bProChat&8] &aChat has been automatically unmuted."));
+                Bukkit.broadcast(FormatManager.parse(
+                        plugin.getConfigManager().getRawMessage("muteall_auto")
+                ));
             }, seconds * 20L).getTaskId();
         }
-        String msg = "&8[&bProChat&8] &cChat has been muted" +
-                (seconds > 0 ? " for " + seconds + "s" : "") +
-                (reason != null && !reason.isEmpty() ? ": &f" + reason : ".");
+        String reasonPart = "";
+        if (reason != null && !reason.isEmpty()) {
+            reasonPart = ": &f" + reason;
+        }
+        String msg = plugin.getConfigManager().getRawMessage("muteall_muted")
+                .replace("{reason}", reasonPart);
         Bukkit.broadcast(FormatManager.parse(msg));
     }
 
@@ -42,7 +47,9 @@ public class MuteManager {
             Bukkit.getScheduler().cancelTask(taskId);
             taskId = -1;
         }
-        Bukkit.broadcast(FormatManager.parse("&8[&bProChat&8] &aChat has been unmuted."));
+        Bukkit.broadcast(FormatManager.parse(
+                plugin.getConfigManager().getRawMessage("muteall_unmuted")
+        ));
     }
 
     public boolean canTalk(Player player) {

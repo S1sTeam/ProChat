@@ -67,7 +67,7 @@ public class ProChatCommand implements TabExecutor {
             }
             default -> {
                 sender.sendMessage(FormatManager.parse(
-                        "&cUsage: /prochat [reload|channel|sound]"
+                        plugin.getConfigManager().getRawMessage("prochat_usage")
                 ));
             }
         }

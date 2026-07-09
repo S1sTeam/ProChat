@@ -2,7 +2,6 @@ package me.prochat.pm;
 
 import me.prochat.ProChatPlugin;
 import me.prochat.chat.FormatManager;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,18 +37,22 @@ public class MsgCommand implements TabExecutor {
         };
     }
 
+    private String lang(String key) {
+        return plugin.getConfigManager().getRawMessage(key);
+    }
+
     private boolean handleMsg(Player player, String[] args) {
         if (args.length < 2) {
-            player.sendMessage(FormatManager.parse("&cUsage: /msg <player> <message>"));
+            player.sendMessage(FormatManager.parse(lang("msg_usage")));
             return true;
         }
         Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) {
-            player.sendMessage(FormatManager.parse("&cPlayer not found."));
+            player.sendMessage(FormatManager.parse(lang("msg_not_found")));
             return true;
         }
         if (target.equals(player)) {
-            player.sendMessage(FormatManager.parse("&cYou can't message yourself."));
+            player.sendMessage(FormatManager.parse(lang("msg_self")));
             return true;
         }
         String message = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
@@ -59,7 +62,7 @@ public class MsgCommand implements TabExecutor {
 
     private boolean handleReply(Player player, String[] args) {
         if (args.length < 1) {
-            player.sendMessage(FormatManager.parse("&cUsage: /r <message>"));
+            player.sendMessage(FormatManager.parse(lang("reply_usage")));
             return true;
         }
         String message = String.join(" ", args);
@@ -69,38 +72,42 @@ public class MsgCommand implements TabExecutor {
 
     private boolean handleSocialSpy(Player player) {
         if (!player.hasPermission("prochat.socialspy")) {
-            player.sendMessage(FormatManager.parse("&cNo permission."));
+            player.sendMessage(FormatManager.parse(lang("no_permission")));
             return true;
         }
         boolean enabled = plugin.getSocialSpyManager().toggle(player);
         player.sendMessage(FormatManager.parse(
-                "&7SocialSpy " + (enabled ? "&aenabled" : "&cdisabled") + "&7.")
-        );
+                lang("socialspy_toggle")
+                        .replace("{status}", enabled ? lang("socialspy_enabled") : lang("socialspy_disabled"))
+        ));
         return true;
     }
 
     private boolean handleIgnore(Player player, String[] args) {
         if (args.length < 1) {
-            player.sendMessage(FormatManager.parse("&cUsage: /ignore <player>"));
+            player.sendMessage(FormatManager.parse(lang("ignore_usage")));
             return true;
         }
         Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) {
-            player.sendMessage(FormatManager.parse("&cPlayer not found."));
+            player.sendMessage(FormatManager.parse(lang("msg_not_found")));
             return true;
         }
         if (target.equals(player)) {
-            player.sendMessage(FormatManager.parse("&cYou can't ignore yourself."));
+            player.sendMessage(FormatManager.parse(lang("ignore_self")));
             return true;
         }
         if (target.hasPermission("prochat.ignore.bypass")) {
-            player.sendMessage(FormatManager.parse("&cYou can't ignore this player."));
+            player.sendMessage(FormatManager.parse(lang("ignore_bypass")));
             return true;
         }
         boolean ignored = plugin.getIgnoreManager().toggleIgnore(player, target);
+        String status = ignored ? lang("ignore_now") : lang("ignore_no");
         player.sendMessage(FormatManager.parse(
-                "&7" + target.getName() + " " + (ignored ? "&ais now ignored" : "&cis no longer ignored") + "&7.")
-        );
+                lang("ignore_toggle")
+                        .replace("{player}", target.getName())
+                        .replace("{status}", status)
+        ));
         return true;
     }
 

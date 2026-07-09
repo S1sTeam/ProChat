@@ -1,5 +1,6 @@
 package me.prochat.pm;
 
+import me.prochat.ProChatPlugin;
 import me.prochat.chat.FormatManager;
 import org.bukkit.entity.Player;
 
@@ -7,7 +8,12 @@ import java.util.*;
 
 public class SocialSpyManager {
 
+    private final ProChatPlugin plugin;
     private final Set<UUID> spies = new HashSet<>();
+
+    public SocialSpyManager(ProChatPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     public boolean toggle(Player player) {
         if (spies.contains(player.getUniqueId())) {
@@ -23,7 +29,8 @@ public class SocialSpyManager {
     }
 
     public void notify(Player sender, Player target, String message) {
-        String fmt = "&8[&cSS&8] &7{sender} &7-> &7{target}&7: &f{message}"
+        var cfg = plugin.getConfigManager().getSettings().privateMessages;
+        String fmt = (cfg != null ? cfg.formatSocialspy : "&8[&cSS&8] &7{sender} &7-> &7{target}&7: &f{message}")
                 .replace("{sender}", sender.getName())
                 .replace("{target}", target.getName())
                 .replace("{message}", message);

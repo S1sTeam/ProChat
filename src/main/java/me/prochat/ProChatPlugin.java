@@ -59,7 +59,7 @@ public class ProChatPlugin extends JavaPlugin {
 
         privateMessageManager = new PrivateMessageManager(this);
         ignoreManager = new IgnoreManager();
-        socialSpyManager = new SocialSpyManager();
+        socialSpyManager = new SocialSpyManager(this);
         chatLogManager = new ChatLogManager(this);
         muteManager = new MuteManager(this);
         vanishHook = new VanishHook();
@@ -80,13 +80,15 @@ public class ProChatPlugin extends JavaPlugin {
         getCommand("socialspy").setExecutor(new MsgCommand(this));
         getCommand("ignore").setExecutor(new MsgCommand(this));
         getCommand("chatlog").setExecutor(new ChatLogCommand(this));
-        getCommand("clear").setExecutor(new ClearCommand());
+        getCommand("clear").setExecutor(new ClearCommand(this));
 
         var muteAllCmd = getCommand("muteall");
         if (muteAllCmd != null) {
             muteAllCmd.setExecutor((sender, cmd, label, args) -> {
                 if (!sender.hasPermission("prochat.muteall")) {
-                    sender.sendMessage(me.prochat.chat.FormatManager.parse("&cNo permission."));
+                    sender.sendMessage(me.prochat.chat.FormatManager.parse(
+                            getConfigManager().getRawMessage("no_permission")
+                    ));
                     return true;
                 }
                 int time = 0;

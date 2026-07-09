@@ -1,11 +1,11 @@
 # ProChat Language - English
-# Copy this file to change messages or create a new locale.
+# Copy this file to create a new locale.
 
 prefix: "&8[&bProChat&8] &7"
-
 reload_success: "&aConfiguration reloaded!"
 no_permission: "&cYou don't have permission!"
 player_only: "&cOnly players can use this command!"
+prochat_usage: "&cUsage: /prochat [reload|channel|sound]"
 
 # ── Channels ──
 channel_switched: "&aSwitched to channel: &e{channel}"
@@ -42,6 +42,7 @@ msg_disabled: "&cPrivate messages are disabled."
 msg_no_permission_target: "&cThis player cannot receive private messages."
 msg_ignored: "&cThis player has ignored you."
 msg_muted: "&cPrivate messages are currently muted."
+reply_usage: "&cUsage: /r <message>"
 
 # ── SocialSpy ──
 socialspy_toggle: "&7SocialSpy: {status}"
@@ -62,9 +63,12 @@ chatlog_empty: "&7No messages logged for &f{player}&7."
 chatlog_header: "&8&m---&8[ &bLast messages: {player} &8]&m---"
 chatlog_cleared: "&aChat log cleared."
 chatlog_cleared_broadcast: "&8[&bProChat&8] &7Chat log has been cleared by {sender}"
+chatlog_not_found: "&cPlayer not found or offline."
 
 # ── MuteAll ──
 muteall_muted: "&8[&bProChat&8] &cChat has been muted{reason}."
 muteall_unmuted: "&8[&bProChat&8] &aChat has been unmuted."
 muteall_auto: "&8[&bProChat&8] &aChat has been automatically unmuted."
-muteall_no_permission: "&cNo permission."
+
+# ── Clear ──
+clear_broadcast: "&8[&bProChat&8] &7Chat cleared by &f{player}"

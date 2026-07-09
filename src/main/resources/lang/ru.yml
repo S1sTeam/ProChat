@@ -1,24 +1,24 @@
 # ProChat Language - Русский
 
 prefix: "&8[&bProChat&8] &7"
-
 reload_success: "&aКонфигурация перезагружена!"
 no_permission: "&cУ вас нет прав!"
 player_only: "&cКоманда доступна только игрокам!"
+prochat_usage: "&cИспользование: /prochat [reload|channel|sound]"
 
-# ── Каналы (Channels) ──
+# ── Каналы ──
 channel_switched: "&aПереключено на канал: &e{channel}"
 channel_current: "&7Текущий канал: &e{channel}"
 channel_not_found: "&cКанал не найден!"
 channel_no_permission: "&cУ вас нет доступа к этому каналу!"
 
-# ── Упоминания (Mention) ──
+# ── Упоминания ──
 mention_alert: "&b&l⚡ &bВас упомянул &f{player}"
 actionbar_mention: "&b&l⚡ {player} &bупомянул вас!"
 title_mention_title: "&b&lУПОМИНАНИЕ!"
 title_mention_subtitle: "&7от {player}"
 
-# ── Анти-Спам (Anti-Spam) ──
+# ── Анти-Спам ──
 antispam_cooldown: "&cПодождите {time} сек. перед следующим сообщением!"
 antispam_caps: "&cНе используйте КАПСЛОК!"
 antispam_swear: "&cВаше сообщение содержит запрещённые слова!"
@@ -26,13 +26,13 @@ antispam_repeat: "&cНе повторяйте сообщения!"
 antispam_blocked: "&cВаше сообщение заблокировано!"
 antispam_muted: "&cЧат сейчас замьючен."
 
-# ── Звуки (Sound) ──
+# ── Звуки ──
 sound_set: "&aЛичный звук сообщений установлен: &e{sound}"
 sound_current: "&7Текущий звук: &e{sound}"
 sound_not_found: "&cЗвук не найден!"
 sound_usage: "&cИспользование: /prochat sound <название_звука>"
 
-# ── Личные сообщения (Private Messages) ──
+# ── Личные сообщения ──
 msg_usage: "&cИспользование: /msg <игрок> <сообщение>"
 msg_not_found: "&cИгрок не найден."
 msg_self: "&cНельзя писать самому себе."
@@ -41,13 +41,14 @@ msg_disabled: "&cЛичные сообщения отключены."
 msg_no_permission_target: "&cЭтот игрок не может получать личные сообщения."
 msg_ignored: "&cЭтот игрок вас игнорирует."
 msg_muted: "&cЛичные сообщения сейчас отключены."
+reply_usage: "&cИспользование: /r <сообщение>"
 
 # ── SocialSpy ──
 socialspy_toggle: "&7SocialSpy: {status}"
 socialspy_enabled: "&aвключён"
 socialspy_disabled: "&cвыключен"
 
-# ── Игнор (Ignore) ──
+# ── Игнор ──
 ignore_usage: "&cИспользование: /ignore <игрок>"
 ignore_toggle: "&7{player} {status}"
 ignore_now: "&aтеперь в игноре"
@@ -55,15 +56,18 @@ ignore_no: "&cбольше не в игноре"
 ignore_self: "&cНельзя игнорировать себя."
 ignore_bypass: "&cНельзя игнорировать этого игрока."
 
-# ── Чат-лог (ChatLog) ──
+# ── Чат-лог ──
 chatlog_usage: "&cИспользование: /chatlog <игрок> | /chatlog clear"
 chatlog_empty: "&7Сообщений для &f{player}&7 не найдено."
 chatlog_header: "&8&m---&8[ &bПоследние сообщения: {player} &8]&m---"
 chatlog_cleared: "&aЧат-лог очищен."
 chatlog_cleared_broadcast: "&8[&bProChat&8] &7Чат-лог очищен {sender}"
+chatlog_not_found: "&cИгрок не найден или не в сети."
 
 # ── MuteAll ──
 muteall_muted: "&8[&bProChat&8] &cЧат замьючен{reason}."
 muteall_unmuted: "&8[&bProChat&8] &aЧат размьючен."
 muteall_auto: "&8[&bProChat&8] &aЧат автоматически размьючен."
-muteall_no_permission: "&cНет прав."
+
+# ── Clear ──
+clear_broadcast: "&8[&bProChat&8] &7Чат очищен &f{player}"

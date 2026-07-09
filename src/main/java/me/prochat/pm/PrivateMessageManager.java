@@ -21,23 +21,24 @@ public class PrivateMessageManager {
 
     public boolean sendMessage(Player sender, Player target, String message) {
         var cfg = plugin.getConfigManager().getSettings().privateMessages;
+        var l = plugin.getConfigManager();
         if (cfg == null || !cfg.enabled) {
-            sender.sendMessage(FormatManager.parse("&cPrivate messages are disabled."));
+            sender.sendMessage(FormatManager.parse(l.getRawMessage("msg_disabled")));
             return false;
         }
 
         if (!sender.hasPermission("prochat.msg")) {
-            sender.sendMessage(FormatManager.parse("&cYou don't have permission to send messages."));
+            sender.sendMessage(FormatManager.parse(l.getRawMessage("no_permission")));
             return false;
         }
 
         if (!target.hasPermission("prochat.msg.receive")) {
-            sender.sendMessage(FormatManager.parse("&cThis player cannot receive private messages."));
+            sender.sendMessage(FormatManager.parse(l.getRawMessage("msg_no_permission_target")));
             return false;
         }
 
         if (plugin.getIgnoreManager() != null && plugin.getIgnoreManager().isIgnored(target, sender)) {
-            sender.sendMessage(FormatManager.parse("&cThis player has ignored you."));
+            sender.sendMessage(FormatManager.parse(l.getRawMessage("msg_ignored")));
             return false;
         }
 
@@ -85,7 +86,7 @@ public class PrivateMessageManager {
     public void reply(Player player, String message) {
         Player target = getLastSender(player);
         if (target == null) {
-            player.sendMessage(FormatManager.parse("&cNobody to reply to."));
+            player.sendMessage(FormatManager.parse(plugin.getConfigManager().getRawMessage("msg_no_one")));
             return;
         }
         sendMessage(player, target, message);

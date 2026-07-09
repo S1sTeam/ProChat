@@ -51,7 +51,9 @@ public class ChatListener implements Listener {
 
         if (plugin.getMuteManager() != null && !plugin.getMuteManager().canTalk(player)) {
             event.setCancelled(true);
-            player.sendMessage(FormatManager.parse("&cChat is currently muted."));
+            player.sendMessage(FormatManager.parse(
+                    plugin.getConfigManager().getRawMessage("antispam_muted")
+            ));
             return;
         }
 
