@@ -7,26 +7,36 @@ import java.util.Map;
 
 public class BadgeManager {
 
-    private final Settings.BadgesConfig config;
+    private Settings.BadgesConfig config;
+    private Settings.VoiceChatConfig vcConfig;
+    private VoiceChatHook voiceChatHook;
 
-    public BadgeManager(Settings.BadgesConfig config) {
-        this.config = config;
+    public BadgeManager(Settings.BadgesConfig config, Settings.VoiceChatConfig vcConfig, VoiceChatHook voiceChatHook) {
+        reload(config, vcConfig, voiceChatHook);
     }
 
-    public void reload(Settings.BadgesConfig config) {
-        // config reference updated via plugin
+    public void reload(Settings.BadgesConfig config, Settings.VoiceChatConfig vcConfig, VoiceChatHook voiceChatHook) {
+        this.config = config;
+        this.vcConfig = vcConfig;
+        this.voiceChatHook = voiceChatHook;
     }
 
     public String getBadges(Player player) {
-        if (!config.enabled) return "";
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> entry : config.badges.entrySet()) {
-            if (!entry.getKey().equals("default") && player.hasPermission("prochat.badge." + entry.getKey())) {
-                sb.append(entry.getValue());
+        if (config != null && config.enabled) {
+            for (Map.Entry<String, String> entry : config.badges.entrySet()) {
+                if (!entry.getKey().equals("default") && player.hasPermission("prochat.badge." + entry.getKey())) {
+                    sb.append(entry.getValue());
+                }
+            }
+            if (sb.isEmpty() && config.badges.containsKey("default")) {
+                sb.append(config.badges.get("default"));
             }
         }
-        if (sb.isEmpty() && config.badges.containsKey("default")) {
-            sb.append(config.badges.get("default"));
+        if (vcConfig != null && vcConfig.enabled && vcConfig.badge != null && !vcConfig.badge.isEmpty()
+                && voiceChatHook != null && voiceChatHook.isAvailable()
+                && player.hasPermission("prochat.badge.voicechat")) {
+            sb.insert(0, vcConfig.badge);
         }
         return sb.toString();
     }

@@ -14,6 +14,7 @@ import me.prochat.hook.PlaceholderAPIHook;
 import me.prochat.hook.SoundManager;
 import me.prochat.hook.ModerationHook;
 import me.prochat.hook.VanishHook;
+import me.prochat.hook.VoiceChatHook;
 import me.prochat.log.ChatLogManager;
 import me.prochat.mention.MentionManager;
 import me.prochat.mute.MuteManager;
@@ -41,6 +42,7 @@ public class ProChatPlugin extends JavaPlugin {
     private MuteManager muteManager;
     private VanishHook vanishHook;
     private ModerationHook moderationHook;
+    private VoiceChatHook voiceChatHook;
     private BukkitTask animTask;
 
     @Override
@@ -66,6 +68,7 @@ public class ProChatPlugin extends JavaPlugin {
         muteManager = new MuteManager(this);
         vanishHook = new VanishHook();
         moderationHook = new ModerationHook();
+        voiceChatHook = new VoiceChatHook(this);
 
         var logCfg = getConfigManager().getSettings().chatlog;
         if (logCfg != null) {
@@ -73,7 +76,11 @@ public class ProChatPlugin extends JavaPlugin {
         }
 
         papiHook = new PlaceholderAPIHook(getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"));
-        badgeManager = new BadgeManager(getConfigManager().getSettings().badges);
+        badgeManager = new BadgeManager(
+                getConfigManager().getSettings().badges,
+                getConfigManager().getSettings().voicechat,
+                voiceChatHook
+        );
 
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 
@@ -126,6 +133,7 @@ public class ProChatPlugin extends JavaPlugin {
     public void onDisable() {
         if (animTask != null) animTask.cancel();
         if (soundManager != null) soundManager.save();
+        if (voiceChatHook != null) voiceChatHook.shutdown();
         getLogger().info("ProChat disabled!");
     }
 
@@ -144,4 +152,5 @@ public class ProChatPlugin extends JavaPlugin {
     public MuteManager getMuteManager() { return muteManager; }
     public VanishHook getVanishHook() { return vanishHook; }
     public ModerationHook getModerationHook() { return moderationHook; }
+    public VoiceChatHook getVoiceChatHook() { return voiceChatHook; }
 }

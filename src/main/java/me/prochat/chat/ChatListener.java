@@ -62,6 +62,7 @@ public class ChatListener implements Listener {
             event.setCancelled(true);
             String msg = plugin.getConfigManager().getRawMessage("antispam_blocked");
             player.sendMessage(FormatManager.parse(msg));
+            syncVoiceMute(player);
             return;
         }
 
@@ -132,6 +133,17 @@ public class ChatListener implements Listener {
         }
     }
 
+    private void syncVoiceMute(Player player) {
+        var vc = plugin.getVoiceChatHook();
+        var vcCfg = plugin.getConfigManager().getSettings().voicechat;
+        if (vc == null || !vc.isAvailable() || vcCfg == null || !vcCfg.enabled || !vcCfg.syncMute) return;
+        if (plugin.getModerationHook() != null && plugin.getModerationHook().isPunished(player)) {
+            vc.mutePlayer(player);
+        } else {
+            vc.unmutePlayer(player);
+        }
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -139,6 +151,7 @@ public class ChatListener implements Listener {
             event.joinMessage(null);
             return;
         }
+        syncVoiceMute(player);
         String msg = plugin.getConfigManager().getSettings().joinFormat
                 .replace("{player}", player.getName())
                 .replace("{display_name}", LegacyComponentSerializer.legacySection().serialize(player.displayName()));

@@ -145,3 +145,8 @@ anti_spam:
   repeat:
     enabled: true
     max_similarity: 85
+
+voicechat:
+  enabled: true
+  sync_mute: true
+  badge: "&b[VC]&r "

@@ -22,6 +22,7 @@ public class Settings {
     public ChatLogConfig chatlog;
     public MuteAllConfig muteall;
     public AntiSpamConfig antiSpam;
+    public VoiceChatConfig voicechat;
 
     public void load(ConfigurationSection config) {
         ConfigurationSection fmt = config.getConfigurationSection("format");
@@ -207,6 +208,14 @@ public class Settings {
                 antiSpam.repeatMaxSimilarity = repeat.getInt("max_similarity", 85);
             }
         }
+
+        ConfigurationSection vc = config.getConfigurationSection("voicechat");
+        if (vc != null) {
+            voicechat = new VoiceChatConfig();
+            voicechat.enabled = vc.getBoolean("enabled", true);
+            voicechat.syncMute = vc.getBoolean("sync_mute", true);
+            voicechat.badge = vc.getString("badge", "&b[VC]&r ");
+        }
     }
 
     public static class ChannelConfig {
@@ -311,5 +320,11 @@ public class Settings {
         public String swearReplace;
         public boolean repeatEnabled;
         public int repeatMaxSimilarity;
+    }
+
+    public static class VoiceChatConfig {
+        public boolean enabled;
+        public boolean syncMute;
+        public String badge;
     }
 }

@@ -48,6 +48,10 @@ public class ModerationHook {
     private Method userIsBanned;
     private Method userIsFrozen;
     private Method userIsJailed;
+    private Method userSetMuted;
+    private Method userSetBanned;
+    private Method userSetFrozen;
+    private Method userSetJailed;
 
     private Object cmiPlayerManager;
     private Method cmiGetUser;
@@ -55,6 +59,10 @@ public class ModerationHook {
     private Method cmiUserIsBanned;
     private Method cmiUserIsFrozen;
     private Method cmiUserIsJailed;
+    private Method cmiUserSetMuted;
+    private Method cmiUserSetBanned;
+    private Method cmiUserSetFrozen;
+    private Method cmiUserSetJailed;
 
     public ModerationHook() {
         hookEssentials();
@@ -75,6 +83,10 @@ public class ModerationHook {
             userIsBanned = safeMethod(userClass, "isBanned");
             userIsFrozen = safeMethod(userClass, "isFrozen");
             userIsJailed = safeMethod(userClass, "isJailed");
+            userSetMuted = safeMethod(userClass, "setMuted", boolean.class);
+            userSetBanned = safeMethod(userClass, "setBanned", boolean.class);
+            userSetFrozen = safeMethod(userClass, "setFrozen", boolean.class);
+            userSetJailed = safeMethod(userClass, "setJailed", boolean.class);
 
             if (userIsMuted != null || userIsBanned != null || userIsFrozen != null || userIsJailed != null) {
                 Bukkit.getLogger().info("[ProChat] EssentialsX hook enabled");
@@ -105,6 +117,10 @@ public class ModerationHook {
             cmiUserIsBanned = safeMethod(userClass, "isBanned");
             cmiUserIsFrozen = safeMethod(userClass, "isFrozen");
             cmiUserIsJailed = safeMethod(userClass, "isJailed");
+            cmiUserSetMuted = safeMethod(userClass, "setMuted", boolean.class);
+            cmiUserSetBanned = safeMethod(userClass, "setBanned", boolean.class);
+            cmiUserSetFrozen = safeMethod(userClass, "setFrozen", boolean.class);
+            cmiUserSetJailed = safeMethod(userClass, "setJailed", boolean.class);
 
             if (cmiUserIsMuted != null || cmiUserIsBanned != null || cmiUserIsFrozen != null || cmiUserIsJailed != null) {
                 Bukkit.getLogger().info("[ProChat] CMI hook enabled");
@@ -112,9 +128,9 @@ public class ModerationHook {
         } catch (Exception ignored) {}
     }
 
-    private Method safeMethod(Class<?> clazz, String name) {
+    private Method safeMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
         try {
-            return clazz.getMethod(name);
+            return clazz.getMethod(name, paramTypes);
         } catch (NoSuchMethodException e) {
             return null;
         }
@@ -186,5 +202,86 @@ public class ModerationHook {
 
     public boolean isPunished(Player player) {
         return isMuted(player) || isBanned(player) || isFrozen(player) || isJailed(player);
+    }
+
+    // ── Write methods ──
+
+    private boolean setReflection(Player player, Object manager, Method getUserMethod,
+                                   Method setter, boolean value) {
+        if (manager == null || getUserMethod == null || setter == null) return false;
+        try {
+            Object user = getUserMethod.invoke(manager, player.getUniqueId());
+            if (user == null) return false;
+            setter.invoke(user, value);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void runConsoleCmd(String cmd) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+    }
+
+    public void mutePlayer(Player player, String reason) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetMuted, true)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetMuted, true)) return;
+        String cmd = "mute " + player.getName();
+        if (reason != null && !reason.isEmpty()) cmd += " " + reason;
+        runConsoleCmd(cmd);
+    }
+
+    public void unmutePlayer(Player player) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetMuted, false)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetMuted, false)) return;
+        runConsoleCmd("unmute " + player.getName());
+    }
+
+    public void banPlayer(Player player, String reason) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetBanned, true)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetBanned, true)) return;
+        try {
+            Bukkit.getBanList(org.bukkit.BanList.Type.NAME).addBan(player.getName(), reason, null, null);
+            return;
+        } catch (Exception ignored) {}
+        String cmd = "ban " + player.getName();
+        if (reason != null && !reason.isEmpty()) cmd += " " + reason;
+        runConsoleCmd(cmd);
+    }
+
+    public void unbanPlayer(Player player) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetBanned, false)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetBanned, false)) return;
+        try {
+            Bukkit.getBanList(org.bukkit.BanList.Type.NAME).pardon(player.getName());
+            return;
+        } catch (Exception ignored) {}
+        runConsoleCmd("unban " + player.getName());
+    }
+
+    public void freezePlayer(Player player) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetFrozen, true)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetFrozen, true)) return;
+        runConsoleCmd("freeze " + player.getName());
+    }
+
+    public void unfreezePlayer(Player player) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetFrozen, false)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetFrozen, false)) return;
+        runConsoleCmd("unfreeze " + player.getName());
+    }
+
+    public void jailPlayer(Player player, String reason) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetJailed, true)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetJailed, true)) return;
+        String cmd = "jail " + player.getName();
+        if (reason != null && !reason.isEmpty()) cmd += " " + reason;
+        runConsoleCmd(cmd);
+    }
+
+    public void unjailPlayer(Player player) {
+        if (setReflection(player, essentialsInstance, essentialsGetUser, userSetJailed, false)) return;
+        if (setReflection(player, cmiPlayerManager, cmiGetUser, cmiUserSetJailed, false)) return;
+        runConsoleCmd("unjail " + player.getName());
     }
 }

@@ -5,7 +5,7 @@ prefix: "&8[&bProChat&8] &7"
 reload_success: "&aConfiguration reloaded!"
 no_permission: "&cYou don't have permission!"
 player_only: "&cOnly players can use this command!"
-prochat_usage: "&cUsage: /prochat [reload|channel|sound]"
+prochat_usage: "&cUsage: /prochat [reload|channel|sound|mute|ban|freeze|jail]"
 
 # ── Channels ──
 channel_switched: "&aSwitched to channel: &e{channel}"
@@ -72,3 +72,7 @@ muteall_auto: "&8[&bProChat&8] &aChat has been automatically unmuted."
 
 # ── Clear ──
 clear_broadcast: "&8[&bProChat&8] &7Chat cleared by &f{player}"
+
+# ── Moderation ──
+player_not_found: "&cPlayer {player} not found or offline."
+mod_success: "&a{action} &7{player}"

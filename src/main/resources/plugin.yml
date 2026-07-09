@@ -5,13 +5,13 @@ api-version: '1.21'
 author: S1sTeam
 description: Advanced chat plugin with channels, formatting, mentions, and anti-spam
 
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI, Voicechat]
 
 commands:
   prochat:
     description: Main ProChat command
-    aliases: [pc]
-    usage: /<command> [reload|channel|sound]
+    aliases: [pc, chat]
+    usage: /<command> [reload|channel|sound|mute|ban|freeze|jail...]
   msg:
     description: Send a private message (overrides vanilla)
     aliases: [tell, whisper, w, m]
@@ -60,6 +60,7 @@ permissions:
       prochat.particles: true
       prochat.badge.*: true
       prochat.bypass.muteall: true
+      prochat.mod.*: true
 
   # ── Chat ──
   prochat.reload:
@@ -125,6 +126,26 @@ permissions:
     default: op
 
   # ── Moderation ──
+  prochat.mod.*:
+    description: All moderation commands
+    default: op
+    children:
+      prochat.mod.mute: true
+      prochat.mod.ban: true
+      prochat.mod.freeze: true
+      prochat.mod.jail: true
+  prochat.mod.mute:
+    description: Mute/unmute players
+    default: op
+  prochat.mod.ban:
+    description: Ban/unban players
+    default: op
+  prochat.mod.freeze:
+    description: Freeze/unfreeze players
+    default: op
+  prochat.mod.jail:
+    description: Jail/unjail players
+    default: op
   prochat.muteall:
     description: Mute the entire chat
     default: op
@@ -149,6 +170,7 @@ permissions:
       prochat.badge.admin: true
       prochat.badge.vip: true
       prochat.badge.donator: true
+      prochat.badge.voicechat: true
   prochat.badge.admin:
     description: Admin badge
     default: op
@@ -157,6 +179,9 @@ permissions:
     default: true
   prochat.badge.donator:
     description: Donator badge
+    default: true
+  prochat.badge.voicechat:
+    description: Voice chat badge
     default: true
 
   # ── Cooldown Groups ──
