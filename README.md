@@ -1,5 +1,7 @@
 # ProChat
 
+![ProChat](https://i.postimg.cc/TwvMRHjT/Max-a-sdelaj-iz-etogo-post-(1).png)
+
 A chat plugin for Paper 1.21+. Replaces the boring vanilla chat with features players actually want.
 
 Channels, animated display names, @mentions, particles, anti-spam, badges — all in one jar.
@@ -245,6 +247,13 @@ Automatic mute/unmute sync with Simple Voice Chat. Badge shows when in voice cha
 /prochat jail <player>      — jail player
 /prochat unjail <player>    — unjail player
 /msg <player> <text>        — private message
+/r <message>                — reply to last PM
+/socialspy                  — spy on private messages
+/ignore <player>            — ignore a player
+/chatlog <player>           — view player chat log
+/chatlog clear              — clear chat log
+/muteall [time] [reason]    — mute entire chat
+/clear (/cc)                — clear chat
 ```
 
 Tab completion works for all commands.
