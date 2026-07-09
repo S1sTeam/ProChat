@@ -21,15 +21,40 @@ public class ModerationHook {
             "muted"
     };
 
+    private static final String[] BAN_PERMS = {
+            "litebans.banned",
+            "advancedban.banned",
+            "exile.banned",
+            "libertybans.banned",
+            "banmanager.banned",
+            "banned"
+    };
+
+    private static final String[] FREEZE_PERMS = {
+            "essentials.frozen",
+            "cmi.frozen",
+            "frozen"
+    };
+
+    private static final String[] JAIL_PERMS = {
+            "essentials.jailed",
+            "cmi.jailed",
+            "jailed"
+    };
+
     private Object essentialsInstance;
     private Method essentialsGetUser;
     private Method userIsMuted;
+    private Method userIsBanned;
+    private Method userIsFrozen;
+    private Method userIsJailed;
 
-    private Object cmiInstance;
-    private Method cmiGetPlayerManager;
     private Object cmiPlayerManager;
     private Method cmiGetUser;
     private Method cmiUserIsMuted;
+    private Method cmiUserIsBanned;
+    private Method cmiUserIsFrozen;
+    private Method cmiUserIsJailed;
 
     public ModerationHook() {
         hookEssentials();
@@ -43,12 +68,17 @@ public class ModerationHook {
             Class<?> essClass = Class.forName("com.earth2me.essentials.Essentials");
             Method getUsers = essClass.getMethod("getUser", java.util.UUID.class);
             Class<?> userClass = Class.forName("com.earth2me.essentials.User");
-            Method isMuted = userClass.getMethod("isMuted");
 
             essentialsInstance = essentials;
             essentialsGetUser = getUsers;
-            userIsMuted = isMuted;
-            Bukkit.getLogger().info("[ProChat] EssentialsX mute hook enabled");
+            userIsMuted = safeMethod(userClass, "isMuted");
+            userIsBanned = safeMethod(userClass, "isBanned");
+            userIsFrozen = safeMethod(userClass, "isFrozen");
+            userIsJailed = safeMethod(userClass, "isJailed");
+
+            if (userIsMuted != null || userIsBanned != null || userIsFrozen != null || userIsJailed != null) {
+                Bukkit.getLogger().info("[ProChat] EssentialsX hook enabled");
+            }
         } catch (Exception ignored) {}
     }
 
@@ -58,62 +88,103 @@ public class ModerationHook {
         try {
             Class<?> cmiClass = Class.forName("com.Zrips.CMI.CMI");
             Method getInstance = cmiClass.getMethod("getInstance");
-            cmiInstance = getInstance.invoke(null);
-            if (cmiInstance == null) return;
+            Object instance = getInstance.invoke(null);
+            if (instance == null) return;
 
             Method getPlayerManager = cmiClass.getMethod("getPlayerManager");
-            cmiPlayerManager = getPlayerManager.invoke(cmiInstance);
-            if (cmiPlayerManager == null) return;
+            Object pm = getPlayerManager.invoke(instance);
+            if (pm == null) return;
 
-            Class<?> playerManagerClass = Class.forName("com.Zrips.CMI.Modules.Players.CMIPlayerManager");
-            Method getCmiUser = playerManagerClass.getMethod("getUser", java.util.UUID.class);
-            Class<?> cmiUserClass = Class.forName("com.Zrips.CMI.CMIPlayer");
-            Method isMuted = cmiUserClass.getMethod("isMuted");
+            Class<?> pmClass = Class.forName("com.Zrips.CMI.Modules.Players.CMIPlayerManager");
+            Method getUser = pmClass.getMethod("getUser", java.util.UUID.class);
+            Class<?> userClass = Class.forName("com.Zrips.CMI.CMIPlayer");
 
-            cmiGetPlayerManager = getPlayerManager;
-            cmiGetUser = getCmiUser;
-            cmiUserIsMuted = isMuted;
-            Bukkit.getLogger().info("[ProChat] CMI mute hook enabled");
+            cmiPlayerManager = pm;
+            cmiGetUser = getUser;
+            cmiUserIsMuted = safeMethod(userClass, "isMuted");
+            cmiUserIsBanned = safeMethod(userClass, "isBanned");
+            cmiUserIsFrozen = safeMethod(userClass, "isFrozen");
+            cmiUserIsJailed = safeMethod(userClass, "isJailed");
+
+            if (cmiUserIsMuted != null || cmiUserIsBanned != null || cmiUserIsFrozen != null || cmiUserIsJailed != null) {
+                Bukkit.getLogger().info("[ProChat] CMI hook enabled");
+            }
         } catch (Exception ignored) {}
     }
 
-    public boolean isMuted(Player player) {
-        if (essentialsInstance != null) {
-            try {
-                Object user = essentialsGetUser.invoke(essentialsInstance, player.getUniqueId());
-                if (user != null && (boolean) userIsMuted.invoke(user)) {
-                    return true;
-                }
-            } catch (Exception ignored) {}
+    private Method safeMethod(Class<?> clazz, String name) {
+        try {
+            return clazz.getMethod(name);
+        } catch (NoSuchMethodException e) {
+            return null;
         }
+    }
 
-        if (cmiPlayerManager != null) {
-            try {
-                Object cmiUser = cmiGetUser.invoke(cmiPlayerManager, player.getUniqueId());
-                if (cmiUser != null && (boolean) cmiUserIsMuted.invoke(cmiUser)) {
-                    return true;
-                }
-            } catch (Exception ignored) {}
+    private boolean checkApi(Object instance, Method method) {
+        if (instance == null || method == null) return false;
+        try {
+            return (boolean) method.invoke(instance);
+        } catch (Exception e) {
+            return false;
         }
+    }
 
-        for (String perm : MUTE_PERMS) {
+    private boolean checkReflection(Player player, Object manager, Method getUserMethod,
+                                     Object userInstance, Method checkMethod) {
+        if (manager == null || getUserMethod == null || checkMethod == null) return false;
+        try {
+            Object user = getUserMethod.invoke(manager, player.getUniqueId());
+            return user != null && (boolean) checkMethod.invoke(user);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean checkPerms(Player player, String[] perms) {
+        for (String perm : perms) {
             if (player.hasPermission(perm)) return true;
         }
+        return false;
+    }
 
-        if (player.hasMetadata("muted")) {
-            for (MetadataValue val : player.getMetadata("muted")) {
+    private boolean checkMetadata(Player player, String key) {
+        if (player.hasMetadata(key)) {
+            for (MetadataValue val : player.getMetadata(key)) {
                 if (val.asBoolean()) return true;
             }
         }
-
-        try {
-            if (player.hasMetadata("banned")) {
-                for (MetadataValue val : player.getMetadata("banned")) {
-                    if (val.asBoolean()) return true;
-                }
-            }
-        } catch (Exception ignored) {}
-
         return false;
+    }
+
+    public boolean isMuted(Player player) {
+        if (checkReflection(player, essentialsInstance, essentialsGetUser, null, userIsMuted)) return true;
+        if (checkReflection(player, cmiPlayerManager, cmiGetUser, null, cmiUserIsMuted)) return true;
+        if (checkPerms(player, MUTE_PERMS)) return true;
+        return checkMetadata(player, "muted");
+    }
+
+    public boolean isBanned(Player player) {
+        if (checkReflection(player, essentialsInstance, essentialsGetUser, null, userIsBanned)) return true;
+        if (checkReflection(player, cmiPlayerManager, cmiGetUser, null, cmiUserIsBanned)) return true;
+        if (checkPerms(player, BAN_PERMS)) return true;
+        return checkMetadata(player, "banned");
+    }
+
+    public boolean isFrozen(Player player) {
+        if (checkReflection(player, essentialsInstance, essentialsGetUser, null, userIsFrozen)) return true;
+        if (checkReflection(player, cmiPlayerManager, cmiGetUser, null, cmiUserIsFrozen)) return true;
+        if (checkPerms(player, FREEZE_PERMS)) return true;
+        return checkMetadata(player, "frozen");
+    }
+
+    public boolean isJailed(Player player) {
+        if (checkReflection(player, essentialsInstance, essentialsGetUser, null, userIsJailed)) return true;
+        if (checkReflection(player, cmiPlayerManager, cmiGetUser, null, cmiUserIsJailed)) return true;
+        if (checkPerms(player, JAIL_PERMS)) return true;
+        return checkMetadata(player, "jailed");
+    }
+
+    public boolean isPunished(Player player) {
+        return isMuted(player) || isBanned(player) || isFrozen(player) || isJailed(player);
     }
 }
