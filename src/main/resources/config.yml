@@ -1,0 +1,56 @@
+format:
+  chat: "{channel_prefix}{prefix}{display_name}{suffix}&7: {message}"
+  join: "&8[&a+&8] &7{player}"
+  quit: "&8[&c-&8] &7{player}"
+
+channels:
+  local:
+    enabled: true
+    display: "L"
+    color: "&7"
+    range: 100
+    permission: "prochat.channel.local"
+    priority: 1
+  global:
+    enabled: true
+    display: "G"
+    color: "&a"
+    range: -1
+    permission: "prochat.channel.global"
+    priority: 2
+  admin:
+    enabled: true
+    display: "A"
+    color: "&c"
+    range: -1
+    permission: "prochat.channel.admin"
+    priority: 3
+
+mention:
+  enabled: true
+  format: "&b&l@{player}&r"
+  sound:
+    enabled: true
+    type: "entity.experience_orb.pickup"
+    volume: 1.0
+    pitch: 1.0
+  permission: "prochat.mention"
+  clickable: true
+  highlight_message: true
+
+anti_spam:
+  enabled: true
+  cooldown:
+    enabled: true
+    seconds: 2
+  caps:
+    enabled: true
+    min_length: 5
+    threshold: 75
+  swear:
+    enabled: true
+    words: []
+    replace_char: "*"
+  repeat:
+    enabled: true
+    max_similarity: 85

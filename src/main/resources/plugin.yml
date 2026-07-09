@@ -1,0 +1,65 @@
+name: ProChat
+version: '${project.version}'
+main: me.prochat.ProChatPlugin
+api-version: '1.21'
+author: S1sTeam
+description: Advanced chat plugin with channels, formatting, mentions, and anti-spam
+
+softdepend: [PlaceholderAPI]
+
+commands:
+  prochat:
+    description: Main ProChat command
+    aliases: [pc]
+    usage: /<command> [reload|channel]
+  msg:
+    description: Send a private message
+    aliases: [tell, whisper, w, m]
+    usage: /<command> <player> <message>
+
+permissions:
+  prochat.*:
+    description: All ProChat permissions
+    default: op
+    children:
+      prochat.reload: true
+      prochat.channel.*: true
+      prochat.mention: true
+      prochat.color: true
+      prochat.rgb: true
+      prochat.gradient: true
+      prochat.bypass.antispam: true
+  prochat.reload:
+    description: Reload config
+    default: op
+  prochat.channel.*:
+    description: All channels
+    default: op
+    children:
+      prochat.channel.local: true
+      prochat.channel.global: true
+      prochat.channel.admin: true
+  prochat.channel.local:
+    description: Use local chat
+    default: true
+  prochat.channel.global:
+    description: Use global chat
+    default: true
+  prochat.channel.admin:
+    description: Use admin chat
+    default: op
+  prochat.mention:
+    description: Use @mentions
+    default: true
+  prochat.color:
+    description: Use color codes
+    default: true
+  prochat.rgb:
+    description: Use hex colors
+    default: op
+  prochat.gradient:
+    description: Use gradients
+    default: op
+  prochat.bypass.antispam:
+    description: Bypass anti-spam
+    default: op

@@ -1,0 +1,18 @@
+prefix: "&8[&bProChat&8] &7"
+
+reload_success: "&aConfiguration reloaded!"
+no_permission: "&cYou don't have permission!"
+player_only: "&cOnly players can use this command!"
+channel_switched: "&aSwitched to channel: &e{channel}"
+channel_current: "&7Current channel: &e{channel}"
+channel_not_found: "&cChannel not found!"
+channel_no_permission: "&cYou don't have access to that channel!"
+
+mention_alert: "&b&l{player} &bmentioned you!"
+mention_format: "&b&l@{player}&r"
+
+antispam_cooldown: "&cPlease wait {time}s before sending another message!"
+antispam_caps: "&cStop using CAPS LOCK!"
+antispam_swear: "&cYour message contains forbidden words!"
+antispam_repeat: "&cStop repeating messages!"
+antispam_blocked: "&cYour message was blocked!"
