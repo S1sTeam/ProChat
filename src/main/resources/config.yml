@@ -1,3 +1,5 @@
+locale: en
+
 format:
   chat: "{badges}{channel_prefix}{prefix}{display_name_anim}{suffix}&7: {message}"
   join: "&8[&a+&8] &7{player}"

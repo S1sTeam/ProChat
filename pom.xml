@@ -5,7 +5,7 @@
 
     <groupId>me.prochat</groupId>
     <artifactId>ProChat</artifactId>
-    <version>0.12</version>
+    <version>0.13</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -46,6 +46,14 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>lang/**</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/lang</directory>
+                <filtering>false</filtering>
+                <targetPath>lang</targetPath>
             </resource>
         </resources>
         <plugins>

@@ -3,15 +3,16 @@ package me.prochat.config;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigManager {
 
     private final JavaPlugin plugin;
-    private YamlConfiguration messagesConfig;
     private final Settings settings = new Settings();
+    private YamlConfiguration messages;
+    private String locale;
 
     public ConfigManager(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -22,27 +23,68 @@ public class ConfigManager {
         plugin.reloadConfig();
         settings.load(plugin.getConfig());
 
-        File msgFile = new File(plugin.getDataFolder(), "messages.yml");
-        if (!msgFile.exists()) {
-            plugin.saveResource("messages.yml", false);
+        locale = plugin.getConfig().getString("locale", "en");
+
+        File langDir = new File(plugin.getDataFolder(), "lang");
+        if (!langDir.exists()) langDir.mkdirs();
+
+        saveLang("en");
+        if (!locale.equals("en")) {
+            saveLang(locale);
         }
-        messagesConfig = YamlConfiguration.loadConfiguration(msgFile);
+
+        File langFile = new File(langDir, locale + ".yml");
+        if (langFile.exists()) {
+            messages = YamlConfiguration.loadConfiguration(langFile);
+        } else {
+            try (InputStreamReader def = new InputStreamReader(
+                    plugin.getResource("lang/en.yml"))) {
+                messages = YamlConfiguration.loadConfiguration(def);
+            } catch (IOException e) {
+                messages = new YamlConfiguration();
+            }
+        }
+    }
+
+    private void saveLang(String loc) {
+        File target = new File(plugin.getDataFolder(), "lang/" + loc + ".yml");
+        if (!target.exists()) {
+            try {
+                plugin.saveResource("lang/" + loc + ".yml", false);
+            } catch (IllegalArgumentException ignored) {}
+        }
     }
 
     public Settings getSettings() { return settings; }
+    public String getLocale() { return locale; }
 
     public String getMessage(String path) {
-        String msg = messagesConfig.getString(path);
-        if (msg == null) return "&cMessage not found: " + path;
-        return getPrefix() + msg;
+        String msg = messages.getString(path);
+        if (msg == null) {
+            msg = fallback(path);
+        }
+        return getPrefix() + (msg != null ? msg : "&cMissing message: " + path);
     }
 
     public String getRawMessage(String path) {
-        String msg = messagesConfig.getString(path);
-        return msg != null ? msg : "&cMessage not found: " + path;
+        String msg = messages.getString(path);
+        if (msg == null) {
+            msg = fallback(path);
+        }
+        return msg != null ? msg : "&cMissing message: " + path;
+    }
+
+    private String fallback(String path) {
+        try (InputStreamReader reader = new InputStreamReader(
+                plugin.getResource("lang/en.yml"))) {
+            return YamlConfiguration.loadConfiguration(reader).getString(path);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String getPrefix() {
-        return messagesConfig.getString("prefix", "&8[&bProChat&8] &7");
+        String p = messages.getString("prefix");
+        return p != null ? p : "&8[&bProChat&8] &7";
     }
 }
