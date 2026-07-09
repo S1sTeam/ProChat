@@ -1,5 +1,7 @@
 # ProChat
 
+![ProChat](https://i.postimg.cc/TwvMRHjT/Max-a-sdelaj-iz-etogo-post-(1).png)
+
 Ein Chat-Plugin für Paper 1.21+. Ersetzt den langweiligen Standard-Chat mit Funktionen, die Spieler wirklich wollen.
 
 Kanäle, animierte Namen, @Erwähnungen, Partikel, Anti-Spam, Abzeichen — alles in einer Jar.
@@ -245,6 +247,13 @@ Automatische Mute/Unmute-Synchronisation mit Simple Voice Chat. Abzeichen wird i
 /prochat jail <spieler>     — Spieler einsperren
 /prochat unjail <spieler>   — Entlassen
 /msg <spieler> <text>       — Privatnachricht
+/r <nachricht>              — auf letzte PN antworten
+/socialspy                  — PN-Überwachung
+/ignore <spieler>           — Spieler ignorieren
+/chatlog <spieler>          — Chat-Verlauf anzeigen
+/chatlog clear              — Verlauf löschen
+/muteall [zeit] [grund]     — gesamten Chat stummschalten
+/clear (/cc)                — Chat leeren
 ```
 
 Tab-Vervollständigung funktioniert für alle Befehle.
